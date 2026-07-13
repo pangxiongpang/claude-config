@@ -123,6 +123,7 @@ find "$TARGET_PROJECT_DIR" \( -name "*.md" -o -name "*.py" -o -name "*.sh" -o -n
   # 替换 __USERNAME__ 和 __PROJECT_DIR__ 占位符（兼容模板版本）
   sed -i "s|__USERNAME__|$NEW_USERNAME|g" "$f" 2>/dev/null || true
   sed -i "s|__PROJECT_DIR__|$PROJECT_DIR_UNIX|g" "$f" 2>/dev/null || true
+  sed -i "s|__CONFIG_REPO_DIR__|$CONFIG_REPO_DIR|g" "$f" 2>/dev/null || true
 done
 
 info "路径替换完成"
