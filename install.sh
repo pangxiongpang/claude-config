@@ -59,7 +59,7 @@ USER_HOME_UNIX="/c/Users/$NEW_USERNAME"
 
 echo ""
 info "========================================"
-info "  Claude Code 配置安装"
+info "  Claude Code & ZCode 配置安装"
 info "========================================"
 info "用户名:       $NEW_USERNAME"
 info "项目目录:     $PROJECT_DIR_WIN"
@@ -68,62 +68,76 @@ info "Obsidian:     $OBSIDIAN_VAULT"
 info "========================================"
 echo ""
 
-# ---- 1. 安装用户级配置 ----
-info ">>> 安装用户级配置到 ~/.claude/..."
+# ---- 1. 安装 Claude 用户级配置 ----
+info ">>> [Claude] 安装用户级配置到 ~/.claude/..."
 
 TARGET_USER_DIR="$USER_HOME_UNIX/.claude"
 mkdir -p "$TARGET_USER_DIR/skills" "$TARGET_USER_DIR/agents" "$TARGET_USER_DIR/memory" "$TARGET_USER_DIR/workflows"
 
-# 复制文件
-cp "$CONFIG_REPO_DIR/user/CLAUDE.md" "$TARGET_USER_DIR/"
-cp "$CONFIG_REPO_DIR/user/.mcp.json" "$TARGET_USER_DIR/" 2>/dev/null || warn ".mcp.json 不存在，跳过"
-cp "$CONFIG_REPO_DIR/user/statusline.sh" "$TARGET_USER_DIR/" 2>/dev/null || true
-cp "$CONFIG_REPO_DIR/user/statusline.py" "$TARGET_USER_DIR/" 2>/dev/null || true
-[ -d "$CONFIG_REPO_DIR/user/skills" ] && cp -r "$CONFIG_REPO_DIR/user/skills/"* "$TARGET_USER_DIR/skills/" 2>/dev/null || true
-[ -d "$CONFIG_REPO_DIR/user/agents" ] && cp -r "$CONFIG_REPO_DIR/user/agents/"* "$TARGET_USER_DIR/agents/" 2>/dev/null || true
-[ -d "$CONFIG_REPO_DIR/user/memory" ] && cp -r "$CONFIG_REPO_DIR/user/memory/"* "$TARGET_USER_DIR/memory/" 2>/dev/null || true
+cp "$CONFIG_REPO_DIR/claude/user/CLAUDE.md" "$TARGET_USER_DIR/"
+cp "$CONFIG_REPO_DIR/claude/user/.mcp.json" "$TARGET_USER_DIR/" 2>/dev/null || warn ".mcp.json 不存在，跳过"
+cp "$CONFIG_REPO_DIR/claude/user/statusline.sh" "$TARGET_USER_DIR/" 2>/dev/null || true
+cp "$CONFIG_REPO_DIR/claude/user/statusline.py" "$TARGET_USER_DIR/" 2>/dev/null || true
+[ -d "$CONFIG_REPO_DIR/claude/user/skills" ] && cp -r "$CONFIG_REPO_DIR/claude/user/skills/"* "$TARGET_USER_DIR/skills/" 2>/dev/null || true
+[ -d "$CONFIG_REPO_DIR/claude/user/agents" ] && cp -r "$CONFIG_REPO_DIR/claude/user/agents/"* "$TARGET_USER_DIR/agents/" 2>/dev/null || true
+[ -d "$CONFIG_REPO_DIR/claude/user/memory" ] && cp -r "$CONFIG_REPO_DIR/claude/user/memory/"* "$TARGET_USER_DIR/memory/" 2>/dev/null || true
 
-info "用户级配置复制完成"
+info "[Claude] 用户级配置复制完成"
 
-# ---- 2. 安装项目级配置 ----
-info ">>> 安装项目级配置到 $PROJECT_DIR_UNIX/.claude/..."
+# ---- 2. 安装 Claude 项目级配置 ----
+info ">>> [Claude] 安装项目级配置到 $PROJECT_DIR_UNIX/.claude/..."
 
 TARGET_PROJECT_DIR="$PROJECT_DIR_UNIX/.claude"
 mkdir -p "$TARGET_PROJECT_DIR/skills" "$TARGET_PROJECT_DIR/memory"
 
-cp "$CONFIG_REPO_DIR/projects/yewu/CLAUDE.md" "$TARGET_PROJECT_DIR/"
-cp "$CONFIG_REPO_DIR/projects/yewu/generate_ai_manual.py" "$TARGET_PROJECT_DIR/" 2>/dev/null || true
-[ -d "$CONFIG_REPO_DIR/projects/yewu/skills" ] && cp -r "$CONFIG_REPO_DIR/projects/yewu/skills/"* "$TARGET_PROJECT_DIR/skills/" 2>/dev/null || true
-[ -d "$CONFIG_REPO_DIR/projects/yewu/memory" ] && cp -r "$CONFIG_REPO_DIR/projects/yewu/memory/"* "$TARGET_PROJECT_DIR/memory/" 2>/dev/null || true
+cp "$CONFIG_REPO_DIR/claude/projects/yewu/CLAUDE.md" "$TARGET_PROJECT_DIR/"
+cp "$CONFIG_REPO_DIR/claude/projects/yewu/generate_ai_manual.py" "$TARGET_PROJECT_DIR/" 2>/dev/null || true
+[ -d "$CONFIG_REPO_DIR/claude/projects/yewu/skills" ] && cp -r "$CONFIG_REPO_DIR/claude/projects/yewu/skills/"* "$TARGET_PROJECT_DIR/skills/" 2>/dev/null || true
+[ -d "$CONFIG_REPO_DIR/claude/projects/yewu/memory" ] && cp -r "$CONFIG_REPO_DIR/claude/projects/yewu/memory/"* "$TARGET_PROJECT_DIR/memory/" 2>/dev/null || true
 
-info "项目级配置复制完成"
+info "[Claude] 项目级配置复制完成"
+
+# ---- 2b. 安装 ZCode 用户级配置 ----
+info ">>> [ZCode] 安装用户级配置到 ~/.zcode/..."
+
+TARGET_ZCODE_USER_DIR="$USER_HOME_UNIX/.zcode"
+mkdir -p "$TARGET_ZCODE_USER_DIR/skills"
+
+[ -f "$CONFIG_REPO_DIR/zcode/user/AGENTS.md" ] && cp "$CONFIG_REPO_DIR/zcode/user/AGENTS.md" "$TARGET_ZCODE_USER_DIR/"
+[ -d "$CONFIG_REPO_DIR/zcode/user/skills" ] && cp -r "$CONFIG_REPO_DIR/zcode/user/skills/"* "$TARGET_ZCODE_USER_DIR/skills/" 2>/dev/null || true
+
+info "[ZCode] 用户级配置复制完成"
+
+# ---- 2c. 安装 ZCode 项目级配置 ----
+info ">>> [ZCode] 安装项目级配置到 $PROJECT_DIR_UNIX/.zcode/..."
+
+TARGET_ZCODE_PROJECT_DIR="$PROJECT_DIR_UNIX/.zcode"
+mkdir -p "$TARGET_ZCODE_PROJECT_DIR"
+
+[ -f "$CONFIG_REPO_DIR/zcode/projects/yewu/Agent.md" ] && cp "$CONFIG_REPO_DIR/zcode/projects/yewu/Agent.md" "$TARGET_ZCODE_PROJECT_DIR/"
+
+info "[ZCode] 项目级配置复制完成"
 
 # ---- 3. 路径替换 ----
 info ">>> 替换路径占位符..."
 
-# 在用户级配置中替换
-find "$TARGET_USER_DIR" \( -name "*.md" -o -name "*.py" -o -name "*.sh" -o -name "*.json" \) -type f 2>/dev/null | while read -r f; do
-  # Windows 路径: C:\Users\11828 → C:\Users\NEW_USERNAME
-  sed -i "s/\\\\Users\\\\$OLD_USERNAME\\\\/\\\\Users\\\\$NEW_USERNAME\\\\/g" "$f" 2>/dev/null || true
-  # Unix 路径: C:/Users/11828 → C:/Users/NEW_USERNAME
-  sed -i "s|/c/Users/$OLD_USERNAME/|/c/Users/$NEW_USERNAME/|g" "$f" 2>/dev/null || true
-  sed -i "s|C:/Users/$OLD_USERNAME/|C:/Users/$NEW_USERNAME/|g" "$f" 2>/dev/null || true
-  # 项目路径: D:\AI\1.业务 → NEW_PROJECT_DIR
-  sed -i "s/$OLD_PROJECT_DIR_WIN/$PROJECT_DIR_WIN/g" "$f" 2>/dev/null || true
-  sed -i "s|$OLD_PROJECT_DIR_UNIX|$PROJECT_DIR_UNIX|g" "$f" 2>/dev/null || true
-done
-
-# 在项目级配置中替换（同上）
-find "$TARGET_PROJECT_DIR" \( -name "*.md" -o -name "*.py" -o -name "*.sh" -o -name "*.json" \) -type f 2>/dev/null | while read -r f; do
-  sed -i "s/\\\\Users\\\\$OLD_USERNAME\\\\/\\\\Users\\\\$NEW_USERNAME\\\\/g" "$f" 2>/dev/null || true
-  sed -i "s|/c/Users/$OLD_USERNAME/|/c/Users/$NEW_USERNAME/|g" "$f" 2>/dev/null || true
-  sed -i "s|C:/Users/$OLD_USERNAME/|C:/Users/$NEW_USERNAME/|g" "$f" 2>/dev/null || true
-  sed -i "s/$OLD_PROJECT_DIR_WIN/$PROJECT_DIR_WIN/g" "$f" 2>/dev/null || true
-  sed -i "s|$OLD_PROJECT_DIR_UNIX|$PROJECT_DIR_UNIX|g" "$f" 2>/dev/null || true
-  # 替换 __USERNAME__ 和 __PROJECT_DIR__ 占位符（兼容模板版本）
-  sed -i "s|__USERNAME__|$NEW_USERNAME|g" "$f" 2>/dev/null || true
-  sed -i "s|__PROJECT_DIR__|$PROJECT_DIR_UNIX|g" "$f" 2>/dev/null || true
-  sed -i "s|__CONFIG_REPO_DIR__|$CONFIG_REPO_DIR|g" "$f" 2>/dev/null || true
+# 在所有配置中替换路径（Claude + ZCode）
+for target_dir in "$TARGET_USER_DIR" "$TARGET_PROJECT_DIR" "$TARGET_ZCODE_USER_DIR" "$TARGET_ZCODE_PROJECT_DIR"; do
+  [ -d "$target_dir" ] || continue
+  find "$target_dir" \( -name "*.md" -o -name "*.py" -o -name "*.sh" -o -name "*.json" \) -type f 2>/dev/null | while read -r f; do
+    # Windows 路径: C:\Users\11828 → C:\Users\NEW_USERNAME
+    sed -i "s/\\\\Users\\\\$OLD_USERNAME\\\\/\\\\Users\\\\$NEW_USERNAME\\\\/g" "$f" 2>/dev/null || true
+    # Unix 路径: C:/Users/11828 → C:/Users/NEW_USERNAME
+    sed -i "s|/c/Users/$OLD_USERNAME/|/c/Users/$NEW_USERNAME/|g" "$f" 2>/dev/null || true
+    sed -i "s|C:/Users/$OLD_USERNAME/|C:/Users/$NEW_USERNAME/|g" "$f" 2>/dev/null || true
+    # 项目路径: D:\AI\1.业务 → NEW_PROJECT_DIR
+    sed -i "s/$OLD_PROJECT_DIR_WIN/$PROJECT_DIR_WIN/g" "$f" 2>/dev/null || true
+    sed -i "s|$OLD_PROJECT_DIR_UNIX|$PROJECT_DIR_UNIX|g" "$f" 2>/dev/null || true
+    # 替换 __USERNAME__ 和 __PROJECT_DIR__ 占位符（兼容模板版本）
+    sed -i "s|__USERNAME__|$NEW_USERNAME|g" "$f" 2>/dev/null || true
+    sed -i "s|__PROJECT_DIR__|$PROJECT_DIR_UNIX|g" "$f" 2>/dev/null || true
+    sed -i "s|__CONFIG_REPO_DIR__|$CONFIG_REPO_DIR|g" "$f" 2>/dev/null || true
+  done
 done
 
 info "路径替换完成"

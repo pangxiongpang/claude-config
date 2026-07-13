@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+@page {
+  size: A4;
+  margin: 20mm 18mm 22mm 18mm;
+  @bottom-center {
+    content: "合同审查报告 · 第 " counter(page) " 页";
+    font-size: 8pt;
+    color: #94a3b8;
+  }
+}
+@page :first {
+  margin: 0;
+  @bottom-center { content: none; }
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "SimSun", "Songti SC", serif;
+  font-size: 10.5pt;
+  line-height: 1.7;
+  color: #1e293b;
+}
+
+/* ════════ 封面 ════════ */
+.cover {
+  page-break-after: always;
+  height: 297mm;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+  text-align: center;
+  padding: 40mm 30mm;
+}
+.cover-top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4mm;
+  background: linear-gradient(90deg, #1e3a5f, #2563eb, #1e3a5f);
+}
+.cover h1 {
+  font-family: "SimHei", "Heiti SC", sans-serif;
+  font-size: 28pt;
+  color: #1e3a5f;
+  letter-spacing: 6pt;
+  margin-bottom: 8mm;
+}
+.cover .contract-name {
+  font-size: 13pt;
+  color: #475569;
+  margin-bottom: 4mm;
+  max-width: 130mm;
+}
+.cover .date {
+  font-size: 11pt;
+  color: #94a3b8;
+  margin-bottom: 12mm;
+}
+.cover .gauge-wrapper {
+  margin: 8mm 0;
+}
+.cover .gauge-svg { width: 180px; height: 110px; }
+.cover .grade-text {
+  font-family: "SimHei", sans-serif;
+  font-size: 14pt;
+  color: #475569;
+  margin-top: 4mm;
+}
+.cover .grade-text .letter {
+  font-size: 20pt;
+  font-weight: bold;
+}
+.cover .disclaimer {
+  position: absolute;
+  bottom: 18mm;
+  left: 30mm;
+  right: 30mm;
+  font-size: 8pt;
+  color: #94a3b8;
+  border-top: 0.5pt solid #cbd5e1;
+  padding-top: 3mm;
+  text-align: center;
+}
+
+/* ════════ 正文 ════════ */
+h2 {
+  font-family: "SimHei", sans-serif;
+  font-size: 15pt;
+  color: #1e3a5f;
+  border-bottom: 2pt solid #2563eb;
+  padding-bottom: 2mm;
+  margin: 8mm 0 4mm 0;
+}
+h3 {
+  font-family: "SimHei", sans-serif;
+  font-size: 12pt;
+  color: #334155;
+  margin: 5mm 0 3mm 0;
+}
+
+/* 表格 */
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 5mm;
+  font-size: 10pt;
+}
+.info-table td {
+  padding: 2.5mm 3mm;
+  border-bottom: 0.5pt solid #e2e8f0;
+  vertical-align: top;
+}
+.info-table td:first-child {
+  width: 28mm;
+  font-weight: bold;
+  color: #1e3a5f;
+  white-space: nowrap;
+}
+
+/* 风险仪表盘 */
+.risk-summary {
+  display: flex;
+  gap: 4mm;
+  margin: 4mm 0;
+}
+.risk-box {
+  flex: 1;
+  text-align: center;
+  padding: 3mm;
+  border-radius: 2mm;
+}
+.risk-box.high { background: #fef2f2; border: 1pt solid #fca5a5; }
+.risk-box.med  { background: #fffbeb; border: 1pt solid #fcd34d; }
+.risk-box.low  { background: #f0fdf4; border: 1pt solid #86efac; }
+.risk-box .num {
+  font-family: "SimHei", sans-serif;
+  font-size: 20pt;
+  font-weight: bold;
+}
+.risk-box.high .num { color: #dc2626; }
+.risk-box.med .num  { color: #d97706; }
+.risk-box.low .num  { color: #16a34a; }
+.risk-box .label {
+  font-size: 9pt;
+  color: #64748b;
+  margin-top: 1mm;
+}
+
+/* 风险详情表 */
+.risk-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 3mm 0 5mm 0;
+  font-size: 9.5pt;
+}
+.risk-table th {
+  background: #1e3a5f;
+  color: white;
+  padding: 2mm 3mm;
+  text-align: left;
+  font-family: "SimHei", sans-serif;
+}
+.risk-table td {
+  padding: 2mm 3mm;
+  border-bottom: 0.5pt solid #e2e8f0;
+  vertical-align: top;
+}
+.risk-table tr:nth-child(even) { background: #f8fafc; }
+
+/* 条款卡片 */
+.clause-card {
+  border: 0.5pt solid #e2e8f0;
+  border-radius: 2mm;
+  margin: 3mm 0;
+  padding: 3mm 4mm;
+  page-break-inside: avoid;
+}
+.clause-card.high { border-left: 3pt solid #dc2626; }
+.clause-card.med  { border-left: 3pt solid #d97706; }
+.clause-card.low  { border-left: 3pt solid #16a34a; }
+.clause-card .clause-title {
+  font-family: "SimHei", sans-serif;
+  font-size: 11pt;
+  margin-bottom: 2mm;
+}
+.clause-card .clause-title .tag {
+  display: inline-block;
+  font-size: 8pt;
+  padding: 0.5mm 2mm;
+  border-radius: 1mm;
+  margin-right: 2mm;
+  color: white;
+}
+.clause-card.high .tag { background: #dc2626; }
+.clause-card.med .tag  { background: #d97706; }
+.clause-card.low .tag  { background: #16a34a; }
+.clause-card .field {
+  margin: 1.5mm 0;
+  font-size: 10pt;
+}
+.clause-card .field b {
+  color: #334155;
+}
+
+/* 列表 */
+.priority-list, .step-list, .missing-list {
+  margin: 2mm 0 4mm 4mm;
+  font-size: 10pt;
+}
+.priority-list li, .step-list li, .missing-list li {
+  margin: 1.5mm 0;
+  padding-left: 1mm;
+}
+.priority-list li::marker { color: #2563eb; font-weight: bold; }
+.step-list li::marker { color: #2563eb; }
+.missing-list li::marker { color: #dc2626; }
+
+/* 义务表 */
+.obligation-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 3mm 0 5mm 0;
+  font-size: 9.5pt;
+}
+.obligation-table th {
+  background: #334155;
+  color: white;
+  padding: 2mm 3mm;
+  text-align: left;
+  font-family: "SimHei", sans-serif;
+}
+.obligation-table td {
+  padding: 2mm 3mm;
+  border-bottom: 0.5pt solid #e2e8f0;
+  vertical-align: top;
+}
+.obligation-table tr:nth-child(even) { background: #f8fafc; }
+
+/* 页脚声明 */
+.footer-disclaimer {
+  margin-top: 10mm;
+  padding-top: 3mm;
+  border-top: 0.5pt solid #cbd5e1;
+  font-size: 8pt;
+  color: #94a3b8;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 封面 -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-top-bar"></div>
+  <h1>合同审查报告</h1>
+  <div class="contract-name">{{ contract_name }}</div>
+  <div class="date">报告日期：{{ report_date }}</div>
+  <div class="gauge-wrapper">
+    <svg class="gauge-svg" viewBox="0 0 200 120">
+      <!-- 半圆弧段 -->
+      <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#dc2626" stroke-width="16" stroke-dasharray="50.3 251.2" stroke-dashoffset="0"/>
+      <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#f97316" stroke-width="16" stroke-dasharray="50.3 251.2" stroke-dashoffset="-50.3"/>
+      <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#eab308" stroke-width="16" stroke-dasharray="50.3 251.2" stroke-dashoffset="-100.5"/>
+      <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#84cc16" stroke-width="16" stroke-dasharray="50.3 251.2" stroke-dashoffset="-150.8"/>
+      <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#22c55e" stroke-width="16" stroke-dasharray="50.3 251.2" stroke-dashoffset="-201.1"/>
+      <!-- 分数 -->
+      <text x="100" y="88" text-anchor="middle" font-family="SimHei, sans-serif" font-size="38" font-weight="bold" fill="#1e3a5f">{{ score }}</text>
+      <text x="100" y="108" text-anchor="middle" font-family="SimSun, serif" font-size="12" fill="#94a3b8">/ 100</text>
+    </svg>
+  </div>
+  <div class="grade-text">
+    安全评分：<span class="letter" style="color: {{ grade_color }}">{{ grade }}</span> — {{ grade_label }}
+  </div>
+  <div class="disclaimer">
+    声明：本报告由 AI 辅助生成，不构成法律意见。签署合同前请咨询执业律师。
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 一、合同基本信息 -->
+<!-- ════════════════════════════════════════════════════ -->
+<h2>一、合同基本信息</h2>
+<table class="info-table">
+  <tr><td>合同类型</td><td>{{ details.type }}</td></tr>
+  <tr><td>合同双方</td><td>{{ details.parties }}</td></tr>
+  <tr><td>签订日期</td><td>{{ details.effective_date }}</td></tr>
+  <tr><td>合同期限</td><td>{{ details.term }}</td></tr>
+  <tr><td>合同金额</td><td>{{ details.total_value }}</td></tr>
+  <tr><td>适用法律</td><td>{{ details.governing_law }}</td></tr>
+</table>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 二、审查摘要 -->
+<!-- ════════════════════════════════════════════════════ -->
+<h2>二、审查摘要</h2>
+<p>{{ executive_summary }}</p>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 三、风险概览 -->
+<!-- ════════════════════════════════════════════════════ -->
+<h2>三、风险概览</h2>
+<div class="risk-summary">
+  <div class="risk-box high">
+    <div class="num">{{ risks.high }}</div>
+    <div class="label">高风险</div>
+  </div>
+  <div class="risk-box med">
+    <div class="num">{{ risks.medium }}</div>
+    <div class="label">中风险</div>
+  </div>
+  <div class="risk-box low">
+    <div class="num">{{ risks.low }}</div>
+    <div class="label">低风险</div>
+  </div>
+</div>
+<table class="risk-table">
+  <tr><th>风险等级</th><th>数量</th><th>涉及条款</th></tr>
+  <tr><td style="color:#dc2626;font-weight:bold">高风险</td><td>{{ risks.high }}</td><td>{{ risks.high_clauses }}</td></tr>
+  <tr><td style="color:#d97706;font-weight:bold">中风险</td><td>{{ risks.medium }}</td><td>{{ risks.medium_clauses }}</td></tr>
+  <tr><td style="color:#16a34a;font-weight:bold">低风险</td><td>{{ risks.low }}</td><td>{{ risks.low_clauses }}</td></tr>
+</table>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 四、条款逐项分析 -->
+<!-- ════════════════════════════════════════════════════ -->
+<h2>四、条款逐项分析</h2>
+{% for c in clauses %}
+<div class="clause-card {{ c.risk }}">
+  <div class="clause-title">
+    <span class="tag">{{ c.risk_label }}</span>
+    {{ c.name }} — 第{{ c.section }}条
+  </div>
+  <div class="field"><b>条文内容：</b>{{ c.summary }}</div>
+  <div class="field"><b>风险分析：</b>{{ c.risk_explanation }}</div>
+  <div class="field"><b>修改建议：</b>{{ c.recommendation }}</div>
+</div>
+{% endfor %}
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 五、义务与截止时间 -->
+<!-- ════════════════════════════════════════════════════ -->
+<h2>五、义务与截止时间</h2>
+<table class="obligation-table">
+  <tr><th>义务方</th><th>义务内容</th><th>截止时间</th><th>违反后果</th></tr>
+  {% for o in obligations %}
+  <tr>
+    <td style="font-weight:bold;{% if o.party == '乙方' %}color:#2563eb{% else %}color:#dc2626{% endif %}">{{ o.party }}</td>
+    <td>{{ o.content }}</td>
+    <td>{{ o.deadline }}</td>
+    <td>{{ o.consequence }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 六、谈判优先事项 -->
+<!-- ════════════════════════════════════════════════════ -->
+<h2>六、谈判优先事项</h2>
+<ol class="priority-list">
+  {% for p in negotiation_priorities %}
+  <li>{{ p }}</li>
+  {% endfor %}
+</ol>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 七、缺失保护条款 -->
+<!-- ════════════════════════════════════════════════════ -->
+<h2>七、缺失保护条款</h2>
+<ul class="missing-list">
+  {% for m in missing_protections %}
+  <li>{{ m }}</li>
+  {% endfor %}
+</ul>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 八、建议下一步 -->
+<!-- ════════════════════════════════════════════════════ -->
+<h2>八、建议下一步</h2>
+<ol class="step-list">
+  {% for s in next_steps %}
+  <li>{{ s }}</li>
+  {% endfor %}
+</ol>
+
+<div class="footer-disclaimer">
+  本报告由 AI 辅助生成，不构成法律意见。签署合同前请咨询执业律师。<br>
+  生成时间：{{ report_date }}
+</div>
+
+</body>
+</html>

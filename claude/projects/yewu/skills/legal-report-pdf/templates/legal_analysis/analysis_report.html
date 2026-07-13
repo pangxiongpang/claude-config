@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+@page {
+  size: A4;
+  margin: 20mm 18mm 22mm 18mm;
+  @bottom-center {
+    content: "法律分析报告 · 第 " counter(page) " 页";
+    font-size: 8pt;
+    color: #94a3b8;
+  }
+}
+@page :first {
+  margin: 0;
+  @bottom-center { content: none; }
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "SimSun", "Songti SC", serif;
+  font-size: 10.5pt;
+  line-height: 1.7;
+  color: #1e293b;
+}
+
+/* ════════ 封面 ════════ */
+.cover {
+  page-break-after: always;
+  height: 297mm;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+  text-align: center;
+  padding: 40mm 30mm;
+}
+.cover-top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4mm;
+  background: linear-gradient(90deg, #1e3a5f, #2563eb, #1e3a5f);
+}
+.cover h1 {
+  font-family: "SimHei", "Heiti SC", sans-serif;
+  font-size: 26pt;
+  color: #1e3a5f;
+  letter-spacing: 6pt;
+  margin-bottom: 6mm;
+}
+.cover .subtitle {
+  font-size: 13pt;
+  color: #475569;
+  margin-bottom: 3mm;
+  max-width: 130mm;
+}
+.cover .meta-line {
+  font-size: 10pt;
+  color: #64748b;
+  margin-bottom: 2mm;
+}
+.cover .disclaimer {
+  position: absolute;
+  bottom: 18mm;
+  left: 30mm;
+  right: 30mm;
+  font-size: 8pt;
+  color: #94a3b8;
+  border-top: 0.5pt solid #cbd5e1;
+  padding-top: 3mm;
+  text-align: center;
+}
+
+/* ════════ 正文 ════════ */
+h2 {
+  font-family: "SimHei", sans-serif;
+  font-size: 15pt;
+  color: #1e3a5f;
+  border-bottom: 2pt solid #2563eb;
+  padding-bottom: 2mm;
+  margin: 8mm 0 4mm 0;
+}
+h3 {
+  font-family: "SimHei", sans-serif;
+  font-size: 12pt;
+  color: #334155;
+  margin: 5mm 0 3mm 0;
+}
+h4 {
+  font-family: "SimHei", sans-serif;
+  font-size: 10.5pt;
+  color: #475569;
+  margin: 3mm 0 2mm 0;
+}
+
+/* ════════ 表格 ════════ */
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 5mm;
+  font-size: 10pt;
+}
+.info-table td {
+  padding: 2.5mm 3mm;
+  border-bottom: 0.5pt solid #e2e8f0;
+  vertical-align: top;
+}
+.info-table td:first-child {
+  width: 32mm;
+  font-weight: bold;
+  color: #1e3a5f;
+  white-space: nowrap;
+}
+
+/* ════════ 风险卡片 ════════ */
+.risk-summary {
+  display: flex;
+  gap: 4mm;
+  margin: 4mm 0;
+}
+.risk-box {
+  flex: 1;
+  text-align: center;
+  padding: 3mm;
+  border-radius: 2mm;
+}
+.risk-box.high { background: #fef2f2; border: 1pt solid #fca5a5; }
+.risk-box.med  { background: #fffbeb; border: 1pt solid #fcd34d; }
+.risk-box.low  { background: #f0fdf4; border: 1pt solid #86efac; }
+.risk-box .num {
+  font-family: "SimHei", sans-serif;
+  font-size: 20pt;
+  font-weight: bold;
+}
+.risk-box.high .num { color: #dc2626; }
+.risk-box.med .num  { color: #d97706; }
+.risk-box.low .num  { color: #16a34a; }
+.risk-box .label {
+  font-size: 9pt;
+  color: #64748b;
+  margin-top: 1mm;
+}
+
+/* ════════ 分析卡片 ════════ */
+.analysis-card {
+  border: 0.5pt solid #e2e8f0;
+  border-radius: 2mm;
+  margin: 3mm 0;
+  padding: 3mm 4mm;
+  page-break-inside: avoid;
+}
+.analysis-card .card-title {
+  font-family: "SimHei", sans-serif;
+  font-size: 11pt;
+  margin-bottom: 2mm;
+  color: #1e3a5f;
+}
+.analysis-card .field {
+  margin: 1.5mm 0;
+  font-size: 10pt;
+}
+.analysis-card .field b {
+  color: #334155;
+}
+
+/* ════════ 法条引用 ════════ */
+.statute-ref {
+  background: #f8fafc;
+  border-left: 2.5pt solid #2563eb;
+  padding: 2mm 3mm;
+  margin: 2mm 0;
+  font-size: 9.5pt;
+  color: #334155;
+  page-break-inside: avoid;
+}
+
+/* ════════ 路径卡片 ════════ */
+.path-card {
+  border: 0.5pt solid #e2e8f0;
+  border-radius: 2mm;
+  margin: 3mm 0;
+  padding: 3mm 4mm;
+  page-break-inside: avoid;
+}
+.path-card.primary { border-left: 3pt solid #2563eb; background: #f8fafc; }
+.path-card.secondary { border-left: 3pt solid #d97706; background: #fffbeb; }
+.path-card.tertiary { border-left: 3pt solid #94a3b8; background: #f8fafc; }
+.path-card .path-title {
+  font-family: "SimHei", sans-serif;
+  font-size: 11pt;
+  margin-bottom: 2mm;
+}
+.path-card .path-title .tag {
+  display: inline-block;
+  font-size: 8pt;
+  padding: 0.5mm 2mm;
+  border-radius: 1mm;
+  margin-right: 2mm;
+  color: white;
+}
+.path-card.primary .tag { background: #2563eb; }
+.path-card.secondary .tag { background: #d97706; }
+.path-card.tertiary .tag { background: #94a3b8; }
+.path-card .field {
+  margin: 1.5mm 0;
+  font-size: 10pt;
+}
+.path-card .field b {
+  color: #334155;
+}
+
+/* ════════ 行动项 ════════ */
+.action-card {
+  border: 0.5pt solid #e2e8f0;
+  border-radius: 2mm;
+  margin: 3mm 0;
+  padding: 3mm 4mm;
+  page-break-inside: avoid;
+  border-left: 3pt solid #dc2626;
+}
+.action-card .action-title {
+  font-family: "SimHei", sans-serif;
+  font-size: 11pt;
+  margin-bottom: 2mm;
+  color: #dc2626;
+}
+.action-card .field {
+  margin: 1.5mm 0;
+  font-size: 10pt;
+}
+
+/* ════════ 列表 ════════ */
+.analysis-list {
+  margin: 2mm 0 4mm 4mm;
+  font-size: 10pt;
+}
+.analysis-list li {
+  margin: 1.5mm 0;
+  padding-left: 1mm;
+}
+.analysis-list li::marker { color: #2563eb; font-weight: bold; }
+.analysis-list.warn li::marker { color: #dc2626; }
+
+/* ════════ 风险表格 ════════ */
+.risk-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 3mm 0 5mm 0;
+  font-size: 9.5pt;
+}
+.risk-table th {
+  background: #1e3a5f;
+  color: white;
+  padding: 2mm 3mm;
+  text-align: left;
+  font-family: "SimHei", sans-serif;
+}
+.risk-table td {
+  padding: 2mm 3mm;
+  border-bottom: 0.5pt solid #e2e8f0;
+  vertical-align: top;
+}
+.risk-table tr:nth-child(even) { background: #f8fafc; }
+
+/* ════════ 强调框 ════════ */
+.highlight-box {
+  background: #f0f9ff;
+  border: 1pt solid #bae6fd;
+  border-radius: 2mm;
+  padding: 3mm 4mm;
+  margin: 4mm 0;
+  font-size: 10pt;
+}
+.highlight-box.warning {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+.highlight-box .title {
+  font-family: "SimHei", sans-serif;
+  font-size: 10.5pt;
+  color: #0369a1;
+  margin-bottom: 1mm;
+}
+.highlight-box.warning .title {
+  color: #dc2626;
+}
+
+/* 页脚声明 */
+.footer-disclaimer {
+  margin-top: 10mm;
+  padding-top: 3mm;
+  border-top: 0.5pt solid #cbd5e1;
+  font-size: 8pt;
+  color: #94a3b8;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 封面 -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-top-bar"></div>
+  <h1>法律分析报告</h1>
+  <div class="subtitle">{{ report_title }}</div>
+  <div class="meta-line">委托方：{{ client_info }}</div>
+  <div class="meta-line">服务对象：{{ service_target }}</div>
+  <div class="meta-line">报告日期：{{ report_date }}</div>
+  <div class="meta-line">密级：内部参考</div>
+  <div class="disclaimer">
+    声明：本报告由 AI 辅助生成，不构成正式法律意见。如需采取法律行动，请结合具体证据情况咨询执业律师。
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 一、案件基本信息 -->
+<!-- ════════════════════════════════════════════════════ -->
+<h2>一、案件基本信息</h2>
+<table class="info-table">
+  {% for key, value in case_info.items() %}
+  <tr><td>{{ key }}</td><td>{{ value }}</td></tr>
+  {% endfor %}
+</table>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 二、项目架构与事实摘要 -->
+<!-- ════════════════════════════════════════════════════ -->
+<h2>二、项目架构与事实摘要</h2>
+<p>{{ project_structure }}</p>
+
+<h3>已知事实</h3>
+<ul class="analysis-list">
+  {% for fact in known_facts %}
+  <li>{{ fact }}</li>
+  {% endfor %}
+</ul>
+
+<h3>核心法律问题</h3>
+<ol class="analysis-list">
+  {% for issue in core_issues %}
+  <li>{{ issue }}</li>
+  {% endfor %}
+</ol>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 三、法律关系分析 -->
+<!-- ════════════════════════════════════════════════════ -->
+<h2>三、法律关系分析</h2>
+
+{% for rel in legal_relations %}
+<h3>{{ rel.title }}</h3>
+<div class="analysis-card">
+  <div class="card-title">{{ rel.subtitle }}</div>
+  <div class="field"><b>法律依据：</b>{{ rel.legal_basis }}</div>
+  <div class="field"><b>分析：</b>{{ rel.analysis }}</div>
+  {% if rel.conclusion %}
+  <div class="field"><b>结论：</b>{{ rel.conclusion }}</div>
+  {% endif %}
+</div>
+{% endfor %}
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 四、垫付款项的法律性质与风险 -->
+<!-- ════════════════════════════════════════════════════ -->
+<h2>四、垫付款项的法律性质与风险</h2>
+<p>{{ payment_analysis.summary }}</p>
+
+<h3>可能的法律定性</h3>
+{% for chr in payment_analysis.characterizations %}
+<div class="analysis-card">
+  <div class="field"><b>定性：</b>{{ chr.type}}</div>
+  <div class="field"><b>法律依据：</b>{{ chr.basis}}</div>
+  <div class="field"><b>法律效果：</b>{{ chr.effect}}</div>
+  {% if chr.risk %}
+  <div class="field"><b>风险：</b>{{ chr.risk}}</div>
+  {% endif %}
+</div>
+{% endfor %}
+
+<div class="highlight-box warning">
+  <div class="title">⚠ 核心证据风险</div>
+  <p>{{ payment_analysis.evidence_risk }}</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 五、追偿路径分析 -->
+<!-- ════════════════════════════════════════════════════ -->
+<h2>五、追偿路径分析</h2>
+
+{% for path in recovery_paths %}
+<div class="path-card {{ path.priority }}">
+  <div class="path-title">
+    <span class="tag">{{ path.tag }}</span>
+    {{ path.title }}
+  </div>
+  <div class="field"><b>法律基础：</b>{{ path.legal_basis }}</div>
+  <div class="field"><b>可行性分析：</b>{{ path.feasibility }}</div>
+  <div class="field"><b>前提条件：</b>{{ path.prerequisites }}</div>
+  {% if path.risks %}
+  <div class="field"><b>风险点：</b>{{ path.risks }}</div>
+  {% endif %}
+</div>
+{% endfor %}
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 六、风险评估 -->
+<!-- ════════════════════════════════════════════════════ -->
+<h2>六、风险评估</h2>
+
+<div class="risk-summary">
+  <div class="risk-box high">
+    <div class="num">{{ risk_counts.high }}</div>
+    <div class="label">高风险</div>
+  </div>
+  <div class="risk-box med">
+    <div class="num">{{ risk_counts.medium }}</div>
+    <div class="label">中风险</div>
+  </div>
+  <div class="risk-box low">
+    <div class="num">{{ risk_counts.low }}</div>
+    <div class="label">低风险</div>
+  </div>
+</div>
+
+<table class="risk-table">
+  <tr><th style="width:18mm">风险等级</th><th style="width:40mm">风险事项</th><th>说明</th></tr>
+  {% for r in risk_items %}
+  <tr>
+    <td style="color:{% if r.level == '高' %}#dc2626{% elif r.level == '中' %}#d97706{% else %}#16a34a{% endif %};font-weight:bold">{{ r.level }}</td>
+    <td>{{ r.item }}</td>
+    <td>{{ r.description }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 七、当前应立即采取的行动 -->
+<!-- ════════════════════════════════════════════════════ -->
+<h2>七、当前应立即采取的行动</h2>
+
+{% for action in urgent_actions %}
+<div class="action-card">
+  <div class="action-title">{{ action.title }}</div>
+  <div class="field"><b>具体操作：</b>{{ action.steps }}</div>
+  <div class="field"><b>重要性：</b>{{ action.importance }}</div>
+</div>
+{% endfor %}
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- 八、结论与建议 -->
+<!-- ════════════════════════════════════════════════════ -->
+<h2>八、结论与建议</h2>
+
+<h3>追偿路径优先级排序</h3>
+<ol class="analysis-list">
+  {% for conclusion in conclusions %}
+  <li><b>{{ conclusion.title }}</b>：{{ conclusion.detail }}</li>
+  {% endfor %}
+</ol>
+
+<h3>最紧迫事项</h3>
+<ul class="analysis-list warn">
+  {% for urgent in most_urgent %}
+  <li>{{ urgent }}</li>
+  {% endfor %}
+</ul>
+
+<div class="footer-disclaimer">
+  本报告由 AI 辅助生成，不构成正式法律意见。如需采取法律行动，请结合具体证据情况咨询执业律师。<br>
+  生成时间：{{ report_date }}
+</div>
+
+</body>
+</html>

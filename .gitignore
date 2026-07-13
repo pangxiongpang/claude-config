@@ -15,7 +15,7 @@ history.jsonl
 .credentials.json
 
 # 项目索引（按机器路径生成的缓存）
-projects/
+/projects/
 
 # 定时任务（运行时状态）
 scheduled_tasks.json
