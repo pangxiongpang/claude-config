@@ -87,21 +87,3 @@ AI 配置手册自动生成脚本：`D:\AI\1.业务\.claude\generate_ai_manual.p
 python D:/AI/1.业务/.claude/generate_ai_manual.py       # 正常更新
 python D:/AI/1.业务/.claude/generate_ai_manual.py --force  # 强制重新生成
 ```
-
----
-
-## 配置跨电脑同步
-
-仓库地址：`https://github.com/pangxiongpang/claude-config`（本地 `D:\AI\claude-config\`）
-
-修改配置后同步到 GitHub（自动 commit + push）：
-```bash
-python D:\AI\claude-config\sync_to_repo.py
-```
-
-换电脑恢复：
-```bash
-git clone https://github.com/pangxiongpang/claude-config.git
-bash claude-config/install.sh -u <用户名> -p <项目目录>
-# 然后手动填写 ~/.claude/.mcp.json 中的北大法宝 token
-```

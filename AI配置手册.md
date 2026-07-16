@@ -1,6 +1,6 @@
 # AI配置手册
 
-> 更新时间：2026-07-16 19:50
+> 更新时间：2026-07-16 19:56
 > 自动生成：`D:\AI\1.业务\.claude\generate_ai_manual.py`
 > 扫描范围：用户级 + 项目级全部 AI 配置
 
@@ -403,7 +403,7 @@ MinerU: `mineru -p <文件> -o <输出目录>/mineru_output -m auto -b pipeline`
 ```
 rm -rf .playwright-mcp/
 ```
-...（共 107 行，仅显示前 50 行）
+...（共 89 行，仅显示前 50 行）
 ```
 
 **用户级 Skills**
@@ -479,6 +479,7 @@ python "D:/AI/1.业务/.claude/skills/law-validation/law_validate.py" "法条名
 | Skill | 类型 | 路径 |
 |-------|------|------|
 | `config-manual` | 本地目录 | `D:\AI\1.业务\.zcode\.zcode\skills\config-manual` |
+| `config-sync` | 本地目录 | `D:\AI\1.业务\.zcode\.zcode\skills\config-sync` |
 | `law-validation` | 本地目录 | `D:\AI\1.业务\.zcode\.zcode\skills\law-validation` |
 | `legal-compare` | 本地目录 | `D:\AI\1.业务\.zcode\.zcode\skills\legal-compare` |
 | `legal-evidence` | 本地目录 | `D:\AI\1.业务\.zcode\.zcode\skills\legal-evidence` |
