@@ -227,13 +227,21 @@ tags: [标签]
 
 ```
 Step 1: obsidian read path="<vault内路径>" vault="胖胖熊"
-Step 2: 改好的内容写入 C:\Users\11828\Desktop\_obsidian_update.md
-Step 3: obsidian create name="<文件名>" path="<vault内路径>" vault="胖胖熊"
-         content="$(cat /c/Users/11828/Desktop/_obsidian_update.md)" overwrite
+Step 2: 改好的内容写入临时文件（如 C:\Users\11828\Desktop\_obsidian_update.md）
+Step 3: 分块写入 Obsidian（obsidian cli 的 content= 参数有 ~4000 字节上限，必须分块）：
+        块1: obsidian create path="<vault内路径>" vault="胖胖熊"
+              content="$(awk 'NR>=1 && NR<=35' /c/Users/11828/Desktop/_obsidian_update.md)" overwrite silent
+        sleep 1
+        块2: obsidian append path="<vault内路径>" vault="胖胖熊"
+              content="$(awk 'NR>=36 && NR<=70' /c/Users/11828/Desktop/_obsidian_update.md)" silent
+        sleep 1
+        ...（按 ~35 行/块继续，直至全部追加完毕）
 Step 4: rm -f /c/Users/11828/Desktop/_obsidian_update.md
 ```
 
-**禁止**用 Read/Write 工具直接操作 Obsidian 文件。
+> **关键规则：** 详见 `obsidian-cli` skill（`C:\Users\11828\.claude\skills\obsidian-cli\SKILL.md`）的 "Writing large files" 章节。
+> **禁止用单次 `content="$(cat <文件>)"` 写入完整内容——超过 4000 字节会静默失败。**
+> **禁止用 Read/Write 工具直接操作 Obsidian 文件。**
 
 ### 5.2 写操作前先读
 

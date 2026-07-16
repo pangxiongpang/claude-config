@@ -1,0 +1,13 @@
+{
+  "defaults": {
+    "watermark_threshold_width": 300,
+    "watermark_threshold_height": 100,
+    "watermark_position_x": 400.0,
+    "watermark_position_y": 700.0
+  },
+  "supported_formats": {
+    "input": [".pdf"],
+    "output": [".pdf"]
+  },
+  "_note": "这些是水印检测的默认参数。水印通常尺寸小于300x100像素，位于页面右下角（x>400, y>700）"
+}

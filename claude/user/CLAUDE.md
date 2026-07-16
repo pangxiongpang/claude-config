@@ -24,9 +24,9 @@ MinerU: `mineru -p <文件> -o <输出目录>/mineru_output -m auto -b pipeline`
 
 ## 配置手册
 
-AI 配置手册自动生成脚本：`__PROJECT_DIR__\.claude\generate_ai_manual.py`
+AI 配置手册自动生成脚本：`D:\AI\1.业务\.claude\generate_ai_manual.py`
 
 ```bash
-python __PROJECT_DIR__/.claude/generate_ai_manual.py       # 正常更新
-python __PROJECT_DIR__/.claude/generate_ai_manual.py --force  # 强制重新生成
+python D:/AI/1.业务/.claude/generate_ai_manual.py       # 正常更新
+python D:/AI/1.业务/.claude/generate_ai_manual.py --force  # 强制重新生成
 ```

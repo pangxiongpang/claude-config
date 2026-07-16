@@ -108,6 +108,12 @@ mkdir -p "$TARGET_ZCODE_USER_DIR/skills"
 
 info "[ZCode] 用户级配置复制完成"
 
+# ---- 2b2. 双写：Claude 用户级 skills 也复制到 ~/.zcode/skills/ ----
+info ">>> [ZCode] 双写 Claude 用户级 skills 到 ~/.zcode/skills/..."
+mkdir -p "$TARGET_ZCODE_USER_DIR/skills"
+[ -d "$TARGET_USER_DIR/skills" ] && cp -r "$TARGET_USER_DIR/skills/"* "$TARGET_ZCODE_USER_DIR/skills/" 2>/dev/null || true
+info "[ZCode] skills 双写完成"
+
 # ---- 2c. 安装 ZCode 项目级配置 ----
 info ">>> [ZCode] 安装项目级配置到 $PROJECT_DIR_UNIX/.zcode/..."
 
@@ -170,14 +176,16 @@ info "========================================"
 echo ""
 info "请手动执行以下操作:"
 echo ""
+echo -e " ${RED}⚠️  必填${NC}: 编辑 ~/.claude/.mcp.json，把 YOUR_PKULAW_TOKEN 替换为你的北大法宝 token"
+echo ""
 echo "  1. 运行 cc switch 恢复 settings.json（如需要）"
 echo "  2. 验证 MCP 连接:"
-echo "     - 检查 ~/.claude/.mcp.json 中北大法宝 Token 是否有效"
+echo "     - 确认北大法宝 token 已正确填写"
 echo "  3. 验证项目配置:"
 echo "     - 确认 $PROJECT_DIR_WIN/.claude/CLAUDE.md 内容正确"
 echo "  4. 安装 Python 依赖:"
 echo "     - pip install playwright PyMuPDF ..."
 echo ""
-info "下次更新 AI 配置手册后，同步到本仓库:"
-echo "  cd $CONFIG_REPO_DIR && git add -A && git commit -m \"chore: 同步配置\" && git push"
+info "日后同步配置（在本机上修改配置后）:"
+echo "  python $CONFIG_REPO_DIR/sync_to_repo.py"
 echo ""

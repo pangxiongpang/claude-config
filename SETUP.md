@@ -16,14 +16,14 @@
 ### Step 1: 克隆仓库
 
 ```bash
-git clone <仓库URL> ~/claude-config
+git clone https://github.com/pangxiongpang/claude-config.git
 # 或放在其他位置
 ```
 
 ### Step 2: 运行安装脚本
 
 ```bash
-bash ~/claude-config/install.sh -u <用户名> -p <项目目录>
+bash claude-config/install.sh -u <用户名> -p <项目目录>
 ```
 
 脚本会自动：
@@ -31,21 +31,35 @@ bash ~/claude-config/install.sh -u <用户名> -p <项目目录>
 - 复制 Claude 项目级配置到 `<项目目录>/.claude/`
 - 复制 ZCode 用户级配置到 `~/.zcode/`
 - 复制 ZCode 项目级配置到 `<项目目录>/.zcode/`
+- **双写**：Claude 用户级 skills 也复制到 `~/.zcode/skills/`（真实文件）
 - 替换所有路径（`11828` → 新用户名、`D:\AI\1.业务` → 新项目路径）
 - 检测并更新 Playwright Chromium 路径
 
-### Step 3: 手动确认
+### Step 3: ⚠️ 必填 — 填写北大法宝 Token
+
+编辑 `~/.claude/.mcp.json`，把所有 `YOUR_PKULAW_TOKEN` 替换为你的北大法宝 API token。
+
+**不填此项，所有北大法宝法律检索功能将不可用。**
+
+### Step 4: 手动确认
 
 1. 运行 `cc switch` 恢复 settings.json（如果之前用 cc 保存过配置）
-2. 检查北大法宝 MCP 连接是否正常
-3. 确认项目 CLAUDE.md/Agent.md 中的路径已正确替换
+2. 确认项目 CLAUDE.md/Agent.md 中的路径已正确替换
 
-### Step 4: 验证
+### Step 5: 验证
 
 启动一个新会话，检查：
 - Claude Code: `/skills` 命令能看到所有 skill
 - ZCode: 技能和指令是否正确加载
 - 法律相关 skill 能否正常调用
+
+## 日常同步
+
+在本机上修改配置后，运行：
+```bash
+python D:\AI\claude-config\sync_to_repo.py
+```
+自动同步并推送到远程仓库。
 
 ## 安装脚本说明
 
