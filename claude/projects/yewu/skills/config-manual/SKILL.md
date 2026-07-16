@@ -1,52 +1,58 @@
 ---
 name: 配置手册
-description: 自动扫描全部 AI 配置（用户级+项目级），生成 AI 配置手册.md 到 Obsidian
+description: 扫描全部 AI 配置，生成配置手册 + 同步到 GitHub 仓库
 ---
 
 # 配置手册
 
 ## 功能
 
-扫描全部 AI 配置（用户级 + 项目级），自动生成 **AI配置手册.md** 写进 Obsidian 笔记库。
+扫描全部 AI 配置（用户级 + 项目级），自动生成 **AI配置手册.md** 写进 Obsidian，
+并将所有配置同步到 GitHub 仓库（`pangxiongpang/claude-config`）。
 
 ## 使用场景
 
-- 你改了 CLAUDE.md 指令，想同步更新配置手册
-- 新增/修改了 Skill，想记录最新清单
-- 新增了 MCP 插件（如北大法宝），想更新记录
-- 随时想查看当前所有配置的一览总表
+- 改了 CLAUDE.md / AGENTS.md / Agent.md，想同步更新手册和远程仓库
+- 新增/修改了 Skill
+- 修改了 MCP 配置（注意：真实 token 自动替换为占位符，不上传）
+- 换电脑前执行一次，确保远程仓库最新
 
 ## 执行命令
 
-```bash
-python D:/AI/1.业务/.claude/generate_ai_manual.py
-```
-
-带 `--force` 参数可强制重新生成（跳过哈希检查）：
+### 生成配置手册
 
 ```bash
-python D:/AI/1.业务/.claude/generate_ai_manual.py --force
+python D:/AI/1.业务/.claude/generate_ai_manual.py          # 正常生成
+python D:/AI/1.业务/.claude/generate_ai_manual.py --force  # 强制重新生成
+python D:/AI/1.业务/.claude/generate_ai_manual.py --check  # 仅检查变化
 ```
 
-带 `--check` 参数仅检查是否有变化（不写入）：
+### 同步配置到 GitHub（含手册 + 全部配置文件）
 
 ```bash
-python D:/AI/1.业务/.claude/generate_ai_manual.py --check
+python D:/AI/claude-config/sync_to_repo.py
 ```
+
+`sync_to_repo.py` 会自动完成：同步文件 → git add → commit → push。
 
 ## 工作原理
 
-该脚本会扫描以下内容，生成 Markdown 手册并写入 Obsidian：
+`generate_ai_manual.py` 会扫描以下内容，生成 Markdown 手册并写入 Obsidian：
 
 | 来源 | 内容 |
 |------|------|
 | 项目级 `CLAUDE.md` | 项目核心指令全文 |
-| 项目级 Skills | `D:\AI\1.业务\.claude\skills\` - 11 个技能 |
+| 项目级 Skills | `D:\AI\1.业务\.claude\skills\` - 12 个技能 |
 | 项目级隐藏 Skills | `D:\AI\1.业务\.claude\.claude\skills\` - GitHub 安装技能 |
 | 用户级 `.claude` Skills | `C:\Users\11828\.claude\skills\` - 9 个技能 |
 | 用户级 CLAUDE.md | 全局指令 |
+| ZCode 用户级 | AGENTS.md + skills |
+| ZCode 项目级 | Agent.md |
 | openCode 配置 | `opencode.jsonc` |
 | 记忆系统 | Reasonix 全局/项目记忆 |
 | 其他 AI 项目 | D:\AI 下所有项目 |
 
-脚本有内置哈希缓存（SHA256），配置无变化时跳过写入，避免 Obsidian 产生无意义版本。
+`sync_to_repo.py` 将配置同步到 `D:\AI\claude-config` 仓库的 `claude/` 和 `zcode/` 目录，
+分隔存储，自动提交推送。`.mcp.json` 中的北大法宝 token 入库时替换为 `YOUR_PKULAW_TOKEN` 占位符。
+
+脚本有内置哈希缓存（SHA256），无变化时跳过写入。

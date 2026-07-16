@@ -1,6 +1,6 @@
 # AI配置手册
 
-> 更新时间：2026-07-16 19:56
+> 更新时间：2026-07-16 19:58
 > 自动生成：`D:\AI\1.业务\.claude\generate_ai_manual.py`
 > 扫描范围：用户级 + 项目级全部 AI 配置
 
@@ -252,7 +252,7 @@ git push
 
 | Skill | 用途 | 路径 |
 |-------|------|------|
-| `config-manual` | 配置手册：自动扫描全部 AI 配置（用户级+项目级），生成 AI 配置手册.md 到 Obsidian | `D:\AI\1.业务\.claude\skills\config-manual` |
+| `config-manual` | 配置手册：扫描全部 AI 配置，生成配置手册 + 同步到 GitHub 仓库 | `D:\AI\1.业务\.claude\skills\config-manual` |
 | `law-validation` | 法条核实：核实法条是否现行有效（国家法律法规数据库）。全称或简称均可，名称和条号分开传入。 | `D:\AI\1.业务\.claude\skills\law-validation` |
 | `legal-compare` | Side-by-Side Contract Comparison：Side-by-side comparison of two contract vers... | `D:\AI\1.业务\.claude\skills\legal-compare` |
 | `legal-evidence` | 证据分析工具：Claim Chart/五维风险评估/不利事实分析，案件证据的系统化分析 | `D:\AI\1.业务\.claude\skills\legal-evidence` |
@@ -479,7 +479,6 @@ python "D:/AI/1.业务/.claude/skills/law-validation/law_validate.py" "法条名
 | Skill | 类型 | 路径 |
 |-------|------|------|
 | `config-manual` | 本地目录 | `D:\AI\1.业务\.zcode\.zcode\skills\config-manual` |
-| `config-sync` | 本地目录 | `D:\AI\1.业务\.zcode\.zcode\skills\config-sync` |
 | `law-validation` | 本地目录 | `D:\AI\1.业务\.zcode\.zcode\skills\law-validation` |
 | `legal-compare` | 本地目录 | `D:\AI\1.业务\.zcode\.zcode\skills\legal-compare` |
 | `legal-evidence` | 本地目录 | `D:\AI\1.业务\.zcode\.zcode\skills\legal-evidence` |
